@@ -1,13 +1,9 @@
 var apiKey = "V3uK0HEWHa70O4oTVeZiwg";
 var easypost = require('node-easypost')(apiKey);
-var options = {
-    root: __dirname + '/public/',
-    dotfiles: 'deny',
-    headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
-    }
-};
+var fs = require('fs');
+var http = require('http');
+var url = require('url');
+
 var fromAddress;
 var toAddress;
 var parcel;
@@ -47,7 +43,7 @@ exports.verify = function(req, res){
 }
 
 exports.ship = function(req, res){
-    var tempFile= __dirname + "server/label.png";
+    console.log(req.body, 'req.body');
     customsInfo.customs_item = [req.body.customs_item];
     easypost.Shipment.create({
         to_address: toAddress,
@@ -55,16 +51,20 @@ exports.ship = function(req, res){
         parcel: req.body.parcel,
         customs_info: customsInfo
     }, function(err, shipment) {
-        res.sendFile(tempFile, options, function(err){
-            if(err){
-                console.log(err);
-                res.status(err.status).end();
-            }
-            else{
-                console.log("sent", tempFile);
-            }
-        });
+        console.log(shipment,"ship");
+        if(err){
+            console.log(err);
+        }
+        else{
+            var img = __dirname + "/label.png";
+            console.log(shipment, "shipment");
+            fs.readFile(img, function(err,data){
+                res.writeHead(200, {'Content-Type': 'image/png'});
+                res.end(img, 'binary');
+            })
+        }
     });
+    // this is a paid service
     // buy postage label with one of the rate objects
     // shipment.buy({rate: shipment.lowestRate(['USPS', 'ups']), insurance: 100.00}, function(err, shipment) {
     //     console.log(shipment.tracking_code);

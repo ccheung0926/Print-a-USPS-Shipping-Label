@@ -7,7 +7,6 @@ $(document).ready(function(){
     var isPackage = false;
     var intl = false;
     var $submit = $("#submit");
-    var $senderAddy = $(".senderAddress");
 
     $submit.on("click", function(e){
         e.preventDefault();
@@ -36,9 +35,9 @@ $(document).ready(function(){
         }
         else if(!isSender && isPackage && !intl){
             parcel.length = $("#name").val();
+            parcel.width = $("#street1").val(); 
             parcel.height = $("#street2").val();
             parcel.weight = $("#city").val();
-            parcel.width = $("street1").val(); 
             intl = true;
             intlShipmentInfo();
    
@@ -78,7 +77,7 @@ $(document).ready(function(){
             url: "http://localhost:3000/api/ship",
             data: shipment,
             success: function(data){
-                console.log(data, "ship");
+                $("#mainPage").append("<img src='label.png'>");
             }
       });
     }
@@ -91,11 +90,11 @@ $(document).ready(function(){
                     value: 96.27,
                     weight: 21.1
                 };
-        $("div").empty();
+        $("#mainPage").empty();
         for(var key in item){
             var $input = $("<p>"+key+": "+"<input id='"+key+"'type='text'placeholder='"+item[key]+"'></p>");
             $input.attr("id", key);
-            $("div").append($input);
+            $("#mainPage").append($input);
         }
     }
 
@@ -108,7 +107,7 @@ $(document).ready(function(){
             $span.append("To Address");
             isSender = false;
         }
-        else if(!isSender && !isPackage){
+        else(!isSender && !isPackage){
             isPackage = true;
             $span.append("Package Dimension & Info");
             $("#name").attr("placeholder", "length");
@@ -116,9 +115,6 @@ $(document).ready(function(){
             $("#street2").attr("placeholder", "height");
             $("#city").attr("placeholder", "weight");
             $(".willRemove").empty();
-        }
-        else{
-            console.log(2);
         }
     }
 });
