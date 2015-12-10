@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/ccheung0926/Print-a-USPS-Shipping-Label#readme",
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "cors": "^2.7.1",
     "express": "^4.13.3",
     "node-easypost": "^2.0.7"
   }

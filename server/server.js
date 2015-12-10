@@ -1,16 +1,16 @@
 var express = require("express");
+var https = require("https");
+var easypost = require("./easypost");
 var app = express();
-var apiKey = "V3uK0HEWHa70O4oTVeZiwg";
-var easypost = require('node-easypost')(apiKey);
+var cors = require("cors");
+var bodyParser = require('body-parser');
 
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/../client"));
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
+app.post("/api/main", easypost.create);
 
 var server = app.listen(3000, function(){
   var host = server.address().address;
