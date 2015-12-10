@@ -1,12 +1,13 @@
 $(document).ready(function(){
-    var fromAddress = {country: "US"};
-    var toAddress = {country: "US"};
+    var isSender = true;
+    var fromAddress = {country: "US", person: "sender"};
+    var toAddress = {country: "US", person: "receiver"};
     var $submit = $("#submit");
     var $senderAddy = $(".senderAddress");
     $submit.on("click", function(e){
         e.preventDefault();
         var $input = $("input");
-        if(Object.keys(fromAddress).length === 1){
+        if(isSender){
             fromAddress.name = $("#senderName").val();
             fromAddress.street1 = $("#fromStreet1").val();
             fromAddress.street2 = $("#fromStreet2").val();
@@ -14,7 +15,7 @@ $(document).ready(function(){
             fromAddress.state = $("#fromState").val();
             fromAddress.zip = $("#fromZip").val();
             fromAddress.phone = $("#fromPhone").val();
-            senderAddress(fromAddress);
+            verifyAddress(fromAddress);
         }
         else{
             toAddress.name = $("#senderName").val();
@@ -24,50 +25,59 @@ $(document).ready(function(){
             toAddress.state = $("#fromState").val();
             toAddress.zip = $("#fromZip").val();
             toAddress.phone = $("#fromPhone").val();
-            receiverAddress(fromAddress);
+            verifyAddress(toAddress);
         }
+        console.log(toAddress, "toAddress");
     });
 
     // to verify the sender address
-    function senderAddress(address){
-      $.ajax({
-        type: "POST",
-        url: "http://localhost:3000/api/sender",
-        data: address,
-        success: function(data){
-          if(data){
-            proccedNextInfo("toReceiver");
-          }
-          else{
-            // proccedNextInfo();
-          }
-        }
-      });
-    }
-
-    function receiverAddress(address){
+    function verifyAddress(address){
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/api/receiver",
+            url: "http://localhost:3000/api/create",
             data: address,
             success: function(data){
-            if(data){
-                proccedNextInfo("toDimension");
+                if(data && isSender){
+                    console.log(data);
+                    console.log("verify sender")
+                    proccedNextInfo();
+                }
+                else if(data && isSender){
+                    console.log("verify receiver");
+                    proccedNextInfo();
+                }
             }
-            else{
-                // proccedNextInfo();
-            }
-        }
       });
     }
 
-    function proccedNextInfo(delivery){
+    // function receiverAddress(address){
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "http://localhost:3000/api/receiver",
+    //         data: address,
+    //         success: function(data){
+    //         if(data){
+    //             proccedNextInfo("toDimension");
+    //         }
+    //         else{
+    //             // proccedNextInfo();
+    //         }
+    //     }
+    //   });
+    // }
+
+    function proccedNextInfo(){
         var $input = $("input");
         var $span = $("span");
         $input.val("");
         $span.empty();
-        if(delivery === "toReceiver"){
+        if(isSender){
             $span.append("To Address");
+            isSender = false;
+        }
+        else if(!isSender){
+            $span.append("Package Dimension");
+
         }
     }
 });
