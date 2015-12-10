@@ -6,7 +6,9 @@ npm install
 ```
 nodemon server/server.js
 ```
-To the apps, go to http://localhost:3000
+run http://localhost:3000
+
+How To Use
 --------------------------------------------
 This is a USPS Printing Shipping Labal Apps.
 1. Type your valid address
