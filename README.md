@@ -6,7 +6,7 @@ npm install
 ```
 nodemon server/server.js
 ```
-run http://localhost:3000
+run [a link]http://localhost:3000
 
 How To Use
 --------------------------------------------
