@@ -12,6 +12,8 @@ exports.create = function(req, res){
                 var verifiedAddress = response.address;
             } else {
                 var verifiedAddress = response;
+                console.log('hi')
+                res.send(verifiedAddress);
             }
         });
     });

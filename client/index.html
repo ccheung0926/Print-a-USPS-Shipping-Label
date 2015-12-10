@@ -3,7 +3,21 @@
   <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
+  <link rel="stylesheet" type="text/css" href="index.css">
   </head>
   <body>
+  <form action="#" id="shippingLabel">
+        <h2>USPS Shipping Label</h2>
+        <span>From Address:</span>
+          <p><input type="text" id="senderName" placeholder="Cindy Cheung" /></p>
+          <p><input type="text" id="fromStreet1" placeholder="123 4th Ave." /></p>
+          <p><input type="text" id="fromStreet2" placeholder="Suite C" /></p>
+          <p><input type="text" id="fromCity" placeholder="San Francisco"/></p>
+          <p><input type="text" id="fromState" placeholder="CA"/></p>
+          <p><input type="text" id="fromZip" placeholder="94132"/></p>
+          <p><input type="text" id="fromPhone" placeholder="123-456-7890"/></p>
+    <button id="submit">Next</button> 
+    <div id="div"></div>
+    </form>
   </body>
 </html>
