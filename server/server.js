@@ -10,7 +10,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/../client"));
 
-app.post("/api/create", easypost.create);
+app.post("/api/verify", easypost.verify);
+app.post("/api/ship",easypost.ship);
 
 var server = app.listen(3000, function(){
   var host = server.address().address;

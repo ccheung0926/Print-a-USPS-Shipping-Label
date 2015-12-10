@@ -1,11 +1,14 @@
 $(document).ready(function(){
+    var fromAddress = {person: "sender"};
+    var toAddress = {person: "receiver"};
+    var parcel = {};  
+    var customItem = {};
     var isSender = true;
     var isPackage = false;
     var intl = false;
-    var fromAddress = {person: "sender"};
-    var toAddress = {person: "receiver"};
     var $submit = $("#submit");
     var $senderAddy = $(".senderAddress");
+
     $submit.on("click", function(e){
         e.preventDefault();
         var $input = $("input");
@@ -31,40 +34,69 @@ $(document).ready(function(){
             toAddress.phone = $("#phone").val();
             verifyAddress(toAddress);
         }
-        else{
-
-        }
-    });
-
-    $("#intl input[name='type']").click(function(){
-        console.log(intl);
-        if($('#intl input:radio[name=type]:checked').val() === "Yes"){
+        else if(!isSender && isPackage && !intl){
+            parcel.length = $("#name").val();
+            parcel.height = $("#street2").val();
+            parcel.weight = $("#city").val();
+            parcel.width = $("street1").val(); 
             intl = true;
+            intlShipmentInfo();
+   
         }
         else{
-            intl = false;
+            customItem.description = $("#description").val();
+            customItem.hs_tariff_number = $("#hs_tariff_number").val();
+            customItem.origin_country = $("#origin_country").val();
+            customItem.quantity = $("#origin_country").val();
+            customItem.value = $("#value").val();
+            customItem.weight = $("#weight").val();
+            createShipment({parcel: parcel, customs_items: customItem});
         }
     });
-    // 
 
     // to verify the sender address
     function verifyAddress(address){
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/api/create",
+            url: "http://localhost:3000/api/verify",
             data: address,
             success: function(data){
                 if(data && isSender && !isPackage){
-                    console.log(data);
-                    console.log("verify sender")
                     proccedNextInfo();
                 }
                 else if(data && !isSender && !isPackage){
-                    console.log("verify receiver");
                     proccedNextInfo();
                 }
             }
       });
+    }
+
+    function createShipment(shipment){
+        console.log(parcel, "parcel", customItem);
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/api/ship",
+            data: shipment,
+            success: function(data){
+                console.log(data, "ship");
+            }
+      });
+    }
+
+    function intlShipmentInfo(){
+        var item ={ description: "EasyPost t-shirts",
+                    hs_tariff_number: 123456,
+                    origin_country: "US",
+                    quantity: 2,
+                    value: 96.27,
+                    weight: 21.1
+                };
+        $("div").empty();
+        for(var key in item){
+            var $input = $("<p>"+key+": "+"<input id='"+key+"'type='text'placeholder='"+item[key]+"'></p>");
+            $input.attr("id", key);
+            $("div").append($input);
+        }
     }
 
     function proccedNextInfo(){
@@ -74,16 +106,15 @@ $(document).ready(function(){
         $span.empty();
         if(isSender && !isPackage){
             $span.append("To Address");
-            $("#intl").append("<input type='radio' name='yesno' value='y' class='yn'>Yes<input type='radio' checked='checked' name='yesno' value='n' class='yn'>No")
             isSender = false;
         }
         else if(!isSender && !isPackage){
             isPackage = true;
-            $span.append("Package Dimension");
-            $("#senderName").attr("placeholder", "length");
-            $("#fromStreet1").attr("placeholder", "width");
-            $("#fromStreet2").attr("placeholder", "height");
-            $("#fromCity").attr("placeholder", "weight");
+            $span.append("Package Dimension & Info");
+            $("#name").attr("placeholder", "length");
+            $("#street1").attr("placeholder", "width");
+            $("#street2").attr("placeholder", "height");
+            $("#city").attr("placeholder", "weight");
             $(".willRemove").empty();
         }
         else{
