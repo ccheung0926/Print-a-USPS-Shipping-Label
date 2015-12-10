@@ -10,7 +10,7 @@ run http://localhost:3000
 
 How To Use
 --------------------------------------------
-This is a USPS Printing Shipping Labal Apps.
+This is a USPS Printing Shipping Labal Apps.<br />
 1. Type your valid address <br />
 2. Type your destination valid address <br />
 3. Type your package dimension and info. <br />
