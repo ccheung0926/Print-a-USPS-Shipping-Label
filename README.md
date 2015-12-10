@@ -15,7 +15,7 @@ This is a USPS Printing Shipping Labal Apps.<br />
 2. Type your destination valid address <br />
 3. Type your package dimension and info. <br />
 4. Print your shipping label<br />
---------------------------------------------
+
 Please note that the apps would not procced to the next page if your address is invalid.
 
 API: https://www.easypost.com/
