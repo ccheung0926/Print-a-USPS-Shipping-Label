@@ -1,8 +1,12 @@
 var apiKey = "V3uK0HEWHa70O4oTVeZiwg";
 var easypost = require('node-easypost')(apiKey);
+var fromAddress;
+var toAddress;
+var parcel;
+var customsInfo;
 
 exports.create = function(req, res){
-    var fromAddress = req.body;
+    fromAddress = req.body;
     easypost.Address.create(fromAddress, function(err, fromAddress) {
         fromAddress.verify(function(err, response) {
             if (err) {
@@ -12,7 +16,6 @@ exports.create = function(req, res){
                 var verifiedAddress = response.address;
             } else {
                 var verifiedAddress = response;
-                console.log('hi')
                 res.send(verifiedAddress);
             }
         });
